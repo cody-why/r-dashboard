@@ -1,7 +1,7 @@
 /*
  * @Author: plucky
  * @Date: 2022-10-11 18:53:17
- * @LastEditTime: 2022-10-15 14:17:49
+ * @LastEditTime: 2022-10-16 18:01:09
  * @Description: 
  */
 
@@ -15,7 +15,9 @@ pub fn view(cx:Scope)->Element{
     let route_name = route.last_segment().unwrap_or_default();
 
     let set_sidebar_open = use_set(&cx,IS_SIDEBAR_OPEN);
-    let is_open = use_read(&cx,IS_SIDEBAR_OPEN);
+    let is_sidebar_open = use_read(&cx,IS_SIDEBAR_OPEN);
+
+    let is_menu_open = use_ref(&cx,||vec![false,false]);
 
     let highlight_class = |e:&str|{
         match e == route_name {
@@ -27,22 +29,23 @@ pub fn view(cx:Scope)->Element{
     cx.render(rsx!(
         div{
             class:"flex",
+            // mask
             div{
-                // :class="isOpen ? 'block' : 'hidden'"
-                //  @click="isOpen = false"
                 onclick: move |_| {
                     set_sidebar_open(false);
                 },
                 // class:"fixed inset-0 z-20 transition-opacity bg-black opacity-50 lg:hidden",
-                class: format_args!("fixed inset-0 z-20 transition-opacity bg-black opacity-50 lg:hidden {}",if *is_open {"block"} else {"hidden"}),
+                class: format_args!("fixed inset-0 z-20 transition-opacity bg-black opacity-50 lg:hidden {}",if *is_sidebar_open {"block"} else {"hidden"}),
                 // hidden: format_args!("{}",!is_open),
 
             } 
             div{
-                //   :class="isOpen ? 'translate-x-0 ease-out' : '-translate-x-full ease-in'"
+                // :class="isOpen ? 'translate-x-0 ease-out' : '-translate-x-full ease-in'"
                 // class:"fixed inset-y-0 left-0 z-30 w-64 overflow-y-auto transition duration-300 transform bg-gray-900 lg:translate-x-0 lg:static lg:inset-0",
                 class: format_args!("fixed inset-y-0 left-0 z-30 w-64 overflow-y-auto transition duration-300 transform bg-gray-900 lg:translate-x-0 lg:static lg:inset-0 {}", 
-                if !*is_open { "-translate-x-full ease-in" } else { "translate-x-0 ease-out" }),
+                if !*is_sidebar_open { "-translate-x-full ease-in" } else { "translate-x-0 ease-out" }),
+                
+                // title
                 div {
                     class: "flex items-center justify-center mt-8 ",
                     div {
@@ -54,62 +57,95 @@ pub fn view(cx:Scope)->Element{
                         }
                     }
                 }
-
-                nav{    
+                // menu
+                nav{
                     class: "mt-10",
                     // router-link
                     Link{
-                        class: highlight_class
-                ("dashboard"),
+                        class: highlight_class("dashboard"),
                         //to="/dashboard"
                         to: "/dashboard",
                         icons::icon_2 {}
                         span{class:"mx-4","Dashboard"}
                     }
                     Link{
-                        class: highlight_class
-                ("ui-elements"),
+                        class: highlight_class("ui-elements"),
                         to: "/ui-elements",
                         icons::icon_3 {}
                         span{class:"mx-4","UI Elements"}
                     }
                     Link{
-                        class: highlight_class
-                ("tables"),
+                        class: highlight_class("tables"),
                         to: "/tables",
                         icons::icon_4 {}
                         span{class:"mx-4","Tables"}
                     }
                     Link{
-                        class: highlight_class
-                ("forms"),
+                        class: highlight_class("forms"),
                         to: "/forms",
                         icons::icon_5 {}
                         span{class:"mx-4","Forms"}
                     }
                     Link{
-                        class: highlight_class
-                ("cards"),
+                        class: highlight_class("cards"),
                         to: "/cards",
                         icons::icon_6 {}
                         span{class:"mx-4","Cards"}
                     }
                     Link{
-                        class: highlight_class
-                ("modal"),
+                        class: highlight_class("modal"),
                         to: "/modal",
                         icons::icon_7 {}
                         span{class:"mx-4","Modal"}
                     }
                    
                     Link{
-                        class: highlight_class
-                ("blank"),
+                        class: highlight_class("blank"),
                         to: "/blank",
                         icons::icon_8 {}
                         span{class:"mx-4","Blank"}
                     }
                    
+                    // ul{li{}}
+                    div{
+                        div{
+                            class: "flex items-center px-6 py-2 mt-4 duration-200 border-l-4 border-gray-900 text-gray-500 hover:bg-gray-600 hover:bg-opacity-25 hover:text-gray-100 cursor-pointer",
+                            onclick: move |_| {
+                                let mut is_menu_open = is_menu_open.write();
+                                is_menu_open[0] = !is_menu_open[0];
+                            },
+
+                            div {
+                                class: "flex items-center space-x-4",
+                                icons::icon_2 {}
+                                span {
+                                    "Test"
+                                }
+                                div{
+                                    class: format_args!{"{}",if is_menu_open.read()[0] {"rotate-180"} else {""}} ,
+                                    icons::icon_up_down {}
+                                }
+                            }
+                        }
+                        
+                        div{
+                            class: format_args!("ml-8 mt-1 {}", if is_menu_open.read()[0] {"block"} else {"hidden"}),
+                            Link{
+                                class: highlight_class("blank"),
+                                to: "/blank",
+                                icons::icon_8 {}
+                                span{class:"mx-4","Blank"}
+                            }
+                            Link{
+                                class: highlight_class("blank2"),
+                                to: "/blank",
+                                icons::icon_8 {}
+                                span{class:"mx-4","Blank"}
+                            }
+                        }
+                        
+                    }
+                    //  end
 
                 }
 
@@ -260,6 +296,16 @@ mod icons{
                 <path
                   d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"
                 />
+            </svg>
+        ))
+    }
+
+    // #[inline_props]
+    pub fn icon_up_down(cx:Scope)->Element{
+        cx.render(html!(
+            <svg class="w-3 h-3"
+                 view_box="0 0 12 12">
+                <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z"></path>
             </svg>
         ))
     }
