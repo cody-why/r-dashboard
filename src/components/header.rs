@@ -21,7 +21,6 @@ pub fn view(cx: Scope)->Element{
                 class: "flex items-center",
                 button{
                     class: "text-gray-500 focus:outline-none lg:hidden",//
-                    // @click=\"isOpen = true\"\n 
                     onclick:  move |_| {
                         set_sidebar_open(true);
                     },

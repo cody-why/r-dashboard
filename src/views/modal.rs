@@ -1,7 +1,7 @@
 /*
  * @Author: plucky
  * @Date: 2022-10-15 09:52:14
- * @LastEditTime: 2022-10-15 11:24:14
+ * @LastEditTime: 2022-10-17 00:31:51
  * @Description: 
  */
 
@@ -28,7 +28,7 @@ pub fn view(cx: Scope)->Element{
             
             // Modal
             div{
-                class: format_args!("transition:opacity 0.25s ease {}", if !open.get(){"opacity-0 pointer-events-none"}else{"z-50 fixed w-full h-full top-0 left-0 flex items-center justify-center"}),
+                class: format_args!("transition:opacity 0.25s ease {} z-50 fixed w-full h-full top-0 left-0 flex items-center justify-center", if *open.get(){"false"}else{"opacity-0 pointer-events-none"}),
                 // overlay
                 div{
                     class: "absolute w-full h-full bg-gray-900 opacity-50 modal-overlay",

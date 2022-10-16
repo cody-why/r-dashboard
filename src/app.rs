@@ -1,7 +1,7 @@
 /*
  * @Author: plucky
  * @Date: 2022-10-11 00:07:29
- * @LastEditTime: 2022-10-15 12:38:33
+ * @LastEditTime: 2022-10-17 00:53:17
  * @Description: 
  */
 #![allow(non_snake_case)]
@@ -17,7 +17,7 @@ pub fn app(cx: Scope) -> Element {
     })
 }
 
-/// Routes
+// Routes
 fn routes(cx: Scope) -> Element {
     cx.render(rsx! {
         Route { to: "/", login::view{}}
@@ -33,7 +33,7 @@ fn routes(cx: Scope) -> Element {
     })
 }
 
-/// Home Page View 
+// Home Page View 
 fn Home(cx: Scope)->Element{
     let route = use_route(&cx);
 
@@ -44,10 +44,10 @@ fn Home(cx: Scope)->Element{
             class: "flex h-screen bg-gray-200 font-roboto",
             sidebar::view{}
             div {
-                class: "flex-1 flex flex-col overflow-hidden",
+                class: "flex-1 flex flex-col overflow-hidden w-full ",
                 header::view{}
                 main {
-                    class: "flex-1 overflow-x-hidden overflow-y-auto bg-gray-200",
+                    class: "flex-1 overflow-x-hidden overflow-y-auto ",
                     div {
                         class: "container mx-auto px-6 py-8",
                         slot {

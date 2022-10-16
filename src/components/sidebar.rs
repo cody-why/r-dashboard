@@ -1,11 +1,11 @@
 /*
  * @Author: plucky
  * @Date: 2022-10-11 18:53:17
- * @LastEditTime: 2022-10-16 18:01:09
+ * @LastEditTime: 2022-10-17 00:51:09
  * @Description: 
  */
 
-use dioxus::{prelude::{*}};
+use dioxus::prelude::*;
 use dioxus::prelude::Atom;
 
 pub static IS_SIDEBAR_OPEN: Atom<bool> = |_| false;
@@ -13,7 +13,7 @@ pub static IS_SIDEBAR_OPEN: Atom<bool> = |_| false;
 pub fn view(cx:Scope)->Element{
     let route = use_route(&cx);
     let route_name = route.last_segment().unwrap_or_default();
-
+    
     let set_sidebar_open = use_set(&cx,IS_SIDEBAR_OPEN);
     let is_sidebar_open = use_read(&cx,IS_SIDEBAR_OPEN);
 
@@ -28,7 +28,7 @@ pub fn view(cx:Scope)->Element{
 
     cx.render(rsx!(
         div{
-            class:"flex",
+            class: format_args!("flex  {} lg:block bg-gray-900  ",if *is_sidebar_open { "block" } else { "hidden" }),
             // mask
             div{
                 onclick: move |_| {
@@ -36,14 +36,14 @@ pub fn view(cx:Scope)->Element{
                 },
                 // class:"fixed inset-0 z-20 transition-opacity bg-black opacity-50 lg:hidden",
                 class: format_args!("fixed inset-0 z-20 transition-opacity bg-black opacity-50 lg:hidden {}",if *is_sidebar_open {"block"} else {"hidden"}),
-                // hidden: format_args!("{}",!is_open),
+                // hidden: format_args!("{}",!is_sidebar_open),
 
             } 
             div{
                 // :class="isOpen ? 'translate-x-0 ease-out' : '-translate-x-full ease-in'"
                 // class:"fixed inset-y-0 left-0 z-30 w-64 overflow-y-auto transition duration-300 transform bg-gray-900 lg:translate-x-0 lg:static lg:inset-0",
                 class: format_args!("fixed inset-y-0 left-0 z-30 w-64 overflow-y-auto transition duration-300 transform bg-gray-900 lg:translate-x-0 lg:static lg:inset-0 {}", 
-                if !*is_sidebar_open { "-translate-x-full ease-in" } else { "translate-x-0 ease-out" }),
+                if *is_sidebar_open { "translate-x-0 ease-out " } else {"-translate-x-full ease-in"  }),
                 
                 // title
                 div {
@@ -59,7 +59,7 @@ pub fn view(cx:Scope)->Element{
                 }
                 // menu
                 nav{
-                    class: "mt-10",
+                    class: "mt-10 ",//
                     // router-link
                     Link{
                         class: highlight_class("dashboard"),
