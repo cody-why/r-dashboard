@@ -12,3 +12,9 @@ dioxus-html-macro = "0.2"
 
 tracing = "0"
 tracing-wasm = "0"
+
+[profile.release]
+opt-level = 3
+lto = true
+strip = true
+

@@ -10,3 +10,4 @@ by rust + dioxus + tailwindcss
 https://github.com/wobsoriano/v-dashboard/
 
 ![screenshot](static/screenshot.jpg)
+
