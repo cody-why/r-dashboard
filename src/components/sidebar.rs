@@ -1,7 +1,7 @@
 /*
  * @Author: plucky
  * @Date: 2022-10-11 18:53:17
- * @LastEditTime: 2022-10-17 00:51:09
+ * @LastEditTime: 2022-10-17 09:22:09
  * @Description: 
  */
 
@@ -27,129 +27,127 @@ pub fn view(cx:Scope)->Element{
     };
 
     cx.render(rsx!(
+        //  class: format_args!("flex  {} bg-gray-900  ",if *is_sidebar_open { "" } else { "hidden lg:block" }),
+        // mask
         div{
-            class: format_args!("flex  {} lg:block bg-gray-900  ",if *is_sidebar_open { "block" } else { "hidden" }),
-            // mask
-            div{
-                onclick: move |_| {
-                    set_sidebar_open(false);
-                },
-                // class:"fixed inset-0 z-20 transition-opacity bg-black opacity-50 lg:hidden",
-                class: format_args!("fixed inset-0 z-20 transition-opacity bg-black opacity-50 lg:hidden {}",if *is_sidebar_open {"block"} else {"hidden"}),
-                // hidden: format_args!("{}",!is_sidebar_open),
+            onclick: move |_| {
+                set_sidebar_open(false);
+            },
+            class: format_args!("fixed inset-0 z-20 transition-opacity bg-black opacity-50 lg:hidden {}",if *is_sidebar_open {"block"} else {"hidden"}),
+            // hidden: format_args!("{}",!is_sidebar_open),
 
-            } 
-            div{
-                // :class="isOpen ? 'translate-x-0 ease-out' : '-translate-x-full ease-in'"
-                // class:"fixed inset-y-0 left-0 z-30 w-64 overflow-y-auto transition duration-300 transform bg-gray-900 lg:translate-x-0 lg:static lg:inset-0",
-                class: format_args!("fixed inset-y-0 left-0 z-30 w-64 overflow-y-auto transition duration-300 transform bg-gray-900 lg:translate-x-0 lg:static lg:inset-0 {}", 
-                if *is_sidebar_open { "translate-x-0 ease-out " } else {"-translate-x-full ease-in"  }),
-                
-                // title
+        }
+
+        // sidebar
+        div{
+            class: format_args!("fixed inset-y-0 left-0 z-30 w-48 overflow-y-auto transition duration-300 transform bg-gray-900 lg:translate-x-0 lg:static lg:inset-0 {}", 
+            if *is_sidebar_open { "translate-x-0 ease-out " } else {"-translate-x-full ease-in"  }),
+            
+            // title
+            div {
+                class: "flex items-center justify-center mt-8 ",
                 div {
-                    class: "flex items-center justify-center mt-8 ",
-                    div {
-                        class: "flex items-center",
-                        icons::icon_1 {}
-                        span {
-                            class: "mx-2 text-2xl font-semibold text-white",
-                            "Dashboard"
-                        }
+                    class: "flex items-center",
+                    icons::icon_1 {}
+                    span {
+                        class: "mx-2 text-2xl font-semibold text-white",
+                        "Dashboard"
                     }
                 }
-                // menu
-                nav{
-                    class: "mt-10 ",//
-                    // router-link
-                    Link{
-                        class: highlight_class("dashboard"),
-                        //to="/dashboard"
-                        to: "/dashboard",
-                        icons::icon_2 {}
-                        span{class:"mx-4","Dashboard"}
-                    }
-                    Link{
-                        class: highlight_class("ui-elements"),
-                        to: "/ui-elements",
-                        icons::icon_3 {}
-                        span{class:"mx-4","UI Elements"}
-                    }
-                    Link{
-                        class: highlight_class("tables"),
-                        to: "/tables",
-                        icons::icon_4 {}
-                        span{class:"mx-4","Tables"}
-                    }
-                    Link{
-                        class: highlight_class("forms"),
-                        to: "/forms",
-                        icons::icon_5 {}
-                        span{class:"mx-4","Forms"}
-                    }
-                    Link{
-                        class: highlight_class("cards"),
-                        to: "/cards",
-                        icons::icon_6 {}
-                        span{class:"mx-4","Cards"}
-                    }
-                    Link{
-                        class: highlight_class("modal"),
-                        to: "/modal",
-                        icons::icon_7 {}
-                        span{class:"mx-4","Modal"}
-                    }
-                   
-                    Link{
-                        class: highlight_class("blank"),
-                        to: "/blank",
-                        icons::icon_8 {}
-                        span{class:"mx-4","Blank"}
-                    }
-                   
-                    // ul{li{}}
+            }
+            // menu
+            nav{
+                class: "mt-10 ",//
+                // router-link
+                Link{
+                    class: highlight_class("dashboard"),
+                    //to="/dashboard"
+                    to: "/dashboard",
+                    icons::icon_2 {}
+                    span{class:"mx-4","Dashboard"}
+                }
+                Link{
+                    class: highlight_class("ui-elements"),
+                    to: "/ui-elements",
+                    icons::icon_3 {}
+                    span{class:"mx-4","UI Elements"}
+                }
+                Link{
+                    class: highlight_class("tables"),
+                    to: "/tables",
+                    icons::icon_4 {}
+                    span{class:"mx-4","Tables"}
+                }
+                Link{
+                    class: highlight_class("forms"),
+                    to: "/forms",
+                    icons::icon_5 {}
+                    span{class:"mx-4","Forms"}
+                }
+                Link{
+                    class: highlight_class("cards"),
+                    to: "/cards",
+                    icons::icon_6 {}
+                    span{class:"mx-4","Cards"}
+                }
+                Link{
+                    class: highlight_class("modal"),
+                    to: "/modal",
+                    icons::icon_7 {}
+                    span{class:"mx-4","Modal"}
+                }
+                
+                Link{
+                    class: highlight_class("blank"),
+                    to: "/blank",
+                    icons::icon_8 {}
+                    span{class:"mx-4","Blank"}
+                }
+                
+                // ul{li{}}
+                div{
                     div{
-                        div{
-                            class: "flex items-center px-6 py-2 mt-4 duration-200 border-l-4 border-gray-900 text-gray-500 hover:bg-gray-600 hover:bg-opacity-25 hover:text-gray-100 cursor-pointer",
-                            onclick: move |_| {
-                                let mut is_menu_open = is_menu_open.write();
-                                is_menu_open[0] = !is_menu_open[0];
-                            },
+                        class: "flex items-center px-6 py-2 mt-4 duration-200 border-l-4 border-gray-900 text-gray-500 hover:bg-gray-600 hover:bg-opacity-25 hover:text-gray-100 cursor-pointer",
+                        onclick: move |_| {
+                            let mut is_menu_open = is_menu_open.write();
+                            is_menu_open[0] = !is_menu_open[0];
+                        },
 
-                            div {
-                                class: "flex items-center space-x-4",
-                                icons::icon_2 {}
-                                span {
-                                    "Test"
-                                }
-                                div{
-                                    class: format_args!{"{}",if is_menu_open.read()[0] {"rotate-180"} else {""}} ,
-                                    icons::icon_up_down {}
-                                }
+                        div {
+                            class: "flex items-center space-x-4",
+                            icons::icon_2 {}
+                            span {
+                                "Test"
+                            }
+                            div{
+                                class: format_args!{"{}",if is_menu_open.read()[0] {"rotate-180"} else {""}} ,
+                                icons::icon_up_down {}
                             }
                         }
-                        
-                        div{
-                            class: format_args!("ml-8 mt-1 {}", if is_menu_open.read()[0] {"block"} else {"hidden"}),
-                            Link{
-                                class: highlight_class("blank"),
-                                to: "/blank",
-                                icons::icon_8 {}
-                                span{class:"mx-4","Blank"}
-                            }
-                            Link{
-                                class: highlight_class("blank2"),
-                                to: "/blank",
-                                icons::icon_8 {}
-                                span{class:"mx-4","Blank"}
-                            }
-                        }
-                        
                     }
-                    //  end
-
+                    
+                    div{
+                        class: format_args!("ml-8 mt-1 {}", if is_menu_open.read()[0] {"block"} else {"hidden"}),
+                        Link{
+                            class: highlight_class("blank"),
+                            to: "/blank",
+                            icons::icon_8 {}
+                            span{class:"mx-4","Blank"}
+                        }
+                        Link{
+                            class: highlight_class("blank2"),
+                            to: "/blank",
+                            icons::icon_8 {}
+                            span{class:"mx-4","Blank"}
+                        }
+                    }
+                    
                 }
+                //  end
 
             }
+
+            
 
         }
     ))
@@ -304,7 +302,8 @@ mod icons{
     pub fn icon_up_down(cx:Scope)->Element{
         cx.render(html!(
             <svg class="w-3 h-3"
-                 view_box="0 0 12 12">
+                fill="currentColor"
+                view_box="0 0 12 12">
                 <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z"></path>
             </svg>
         ))

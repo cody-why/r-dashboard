@@ -1,7 +1,7 @@
 /*
  * @Author: plucky
  * @Date: 2022-10-14 12:31:43
- * @LastEditTime: 2022-10-14 23:48:22
+ * @LastEditTime: 2022-10-17 09:02:01
  * @Description: 
  */
 
@@ -142,7 +142,6 @@ pub fn view(cx: Scope)->Element{
                             // 表格数据
                             tbody {
                                 class: "bg-white",
-                                // "<tr v-for=\"(u, index) in users\" :key=\"index\">"
                                 users.iter().map(|u|{
                                     rsx!{ UserList{user:u}}
                                 })

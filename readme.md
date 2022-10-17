@@ -1,4 +1,4 @@
-# v-dashboard ui wasm
+# dashboard ui wasm
 
 by rust + dioxus + tailwindcss
 

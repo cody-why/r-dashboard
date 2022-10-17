@@ -4,8 +4,6 @@ use tracing::info;
 use super::sidebar::IS_SIDEBAR_OPEN;
 
 pub fn view(cx: Scope)->Element{
-    //const dropdownOpen = ref(false);
-    //const { isOpen } = useSidebar();
     let set_sidebar_open = use_set(&cx,IS_SIDEBAR_OPEN);
     let dropdown_open = use_state(&cx, || true);
    
@@ -66,8 +64,6 @@ pub fn view(cx: Scope)->Element{
                     }
                     div{
                         class:"fixed inset-0 z-10 w-full h-full",//
-                        // v-show: "dropdownOpen",
-                        //@click=\"dropdownOpen = false\"
                         // 点击屏幕关闭菜单
                         hidden: "{dropdown_open}",
                         onclick: move |_| {
@@ -76,18 +72,8 @@ pub fn view(cx: Scope)->Element{
                        
                     }
                 
-        //   <transition
-        //   enter-active-class="transition duration-150 ease-out transform"
-        //   enter-from-class="scale-95 opacity-0"
-        //   enter-to-class="scale-100 opacity-100"
-        //   leave-active-class="transition duration-150 ease-in transform"
-        //   leave-from-class="scale-100 opacity-100"
-        //   leave-to-class="scale-95 opacity-0"
-        // >
-                
                     div{
                         class:"absolute right-0 z-20 w-48 py-2 mt-2 bg-white rounded-md shadow-xl {dropdown_class}",
-                        // v-show: "dropdownOpen",
                         hidden: "{dropdown_open}",
                         //onmouseout onmouseover
                         onmouseout: move |_| {
@@ -115,7 +101,6 @@ pub fn view(cx: Scope)->Element{
                     }
                 }
                 
-              // </transition>
             }
         }
         
