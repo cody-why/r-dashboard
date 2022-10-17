@@ -1,7 +1,7 @@
 /*
  * @Author: plucky
  * @Date: 2022-10-11 18:53:17
- * @LastEditTime: 2022-10-17 09:36:40
+ * @LastEditTime: 2022-10-17 09:52:40
  * @Description: 
  */
 
@@ -40,7 +40,7 @@ pub fn view(cx:Scope)->Element{
 
         // sidebar
         div{
-            class: format_args!("fixed inset-y-0 left-0 z-30 w-48 overflow-y-auto transition duration-300 transform bg-gray-900 lg:translate-x-0 lg:static lg:inset-0 {}", 
+            class: format_args!("fixed inset-y-0 left-0 z-30 w-56 overflow-y-auto transition duration-300 transform bg-gray-900 lg:translate-x-0 lg:static lg:inset-0 {}", 
             if *is_sidebar_open { "translate-x-0 ease-out " } else {"-translate-x-full ease-in"  }),
             
             // title
@@ -51,7 +51,7 @@ pub fn view(cx:Scope)->Element{
                     icons::icon_1 {}
                     span {
                         class: "mx-2 text-2xl font-semibold text-white",
-                        "Dashboard"
+                        "R-Dashboard"
                     }
                 }
             }

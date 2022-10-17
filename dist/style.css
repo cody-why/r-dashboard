@@ -1035,6 +1035,10 @@ select{
   width: 1.25rem;
 }
 
+.w-56{
+  width: 14rem;
+}
+
 .w-12{
   width: 3rem;
 }
