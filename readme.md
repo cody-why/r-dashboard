@@ -6,8 +6,6 @@ by rust + dioxus + tailwindcss
 * install tailwind
 * run: trunk serve
 
-参考vue项目:
-https://github.com/wobsoriano/v-dashboard/
 
 ![screenshot](static/screenshot.jpg)
 

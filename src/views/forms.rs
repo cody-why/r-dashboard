@@ -1,7 +1,7 @@
 /*
  * @Author: plucky
  * @Date: 2022-10-15 00:32:59
- * @LastEditTime: 2022-10-15 09:45:50
+ * @LastEditTime: 2022-10-25 15:23:25
  * @Description: 
  */
 
@@ -145,6 +145,7 @@ fn Forms(cx: Scope)->Element{
                                     r#for: "username","Username"
                                 }
                                 input {
+                                    id: "username",
                                     class: "w-full mt-2 border-gray-200 rounded-md focus:border-indigo-600 focus:ring focus:ring-opacity-40 focus:ring-indigo-500",
                                     r#type: "text",
                                     // "v-model: "user.username",
@@ -160,9 +161,10 @@ fn Forms(cx: Scope)->Element{
                             div {
                                 label {
                                     class: "text-gray-700",
-                                    r#for: "emailAddress","Email Address"
+                                    r#for: "email","Email Address"
                                 }
                                 input {
+                                    id: "email",
                                     class: "w-full mt-2 border-gray-200 rounded-md focus:border-indigo-600 focus:ring focus:ring-opacity-40 focus:ring-indigo-500",
                                     r#type: "email",
                                     // "v-model": "user.email",
@@ -178,6 +180,7 @@ fn Forms(cx: Scope)->Element{
                                     r#for: "password","Password"
                                 }
                                 input {
+                                    id: "password",
                                     class: "w-full mt-2 border-gray-200 rounded-md focus:border-indigo-600 focus:ring focus:ring-opacity-40 focus:ring-indigo-500",
                                     r#type: "password",
                                     // "v-model": "user.password",
@@ -190,9 +193,10 @@ fn Forms(cx: Scope)->Element{
                             div {
                                 label {
                                     class: "text-gray-700",
-                                    r#for: "passwordConfirmation","Password Confirmation"
+                                    r#for: "pwConfirm","Password Confirmation"
                                 }
                                 input {
+                                    id: "pwConfirm",
                                     class: "w-full mt-2 border-gray-200 rounded-md focus:border-indigo-600 focus:ring focus:ring-opacity-40 focus:ring-indigo-500",
                                     r#type: "password",
                                     // "v-model": "user.confirm",
