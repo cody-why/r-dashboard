@@ -1,11 +1,11 @@
-# r-dashboard ui wasm
+# r-dashboard
 
 by rust + dioxus + tailwindcss
 
 * install trunk
 * install tailwind
 * run: trunk serve
+* open http://localhost:8080/
 
-
-![screenshot](static/screenshot.jpg)
+![screenshot](assets/screenshot.jpg)
 

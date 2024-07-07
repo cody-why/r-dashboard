@@ -1,24 +1,22 @@
 /*
- * @Author: plucky
+
  * @Date: 2022-10-11 23:13:24
  * @LastEditTime: 2022-10-15 09:53:40
- * @Description: 
+ * @Description:
  */
 
-
-pub mod login;
-pub mod dashboard;
-pub mod ui_elements;
-pub mod tables;
-pub mod forms;
-pub mod card;
-pub mod modal;
 pub mod blank;
+pub mod card;
+pub mod dashboard;
+pub mod forms;
+pub mod login;
+pub mod modal;
+pub mod tables;
+pub mod ui_elements;
 
+// pub fn view()->Element{
 
-// pub fn view(cx: Scope)->Element{
-    
-//     cx.render(rsx!{
+//     (rsx!{
 //         div {
 //         }
 //     })

@@ -1,16 +1,20 @@
 /*
- * @Author: plucky
  * @Date: 2022-10-10 23:58:17
- * @LastEditTime: 2022-10-15 14:02:24
- * @Description: 
+ * @LastEditTime: 2024-07-06 18:52:26
+ * @Description:
  */
+pub mod app;
+pub mod components;
+pub mod modules;
+pub mod views;
 
-use r_dashboard::app::*;
-
+use app::App;
 
 // trunk serve
 fn main() {
     console_error_panic_hook::set_once();
-    tracing_wasm::set_as_global_default();
-    dioxus::web::launch(app);
+    let mut cfg = tracing_wasm::WASMLayerConfigBuilder::default();
+    cfg.set_max_level(tracing::Level::DEBUG);
+    tracing_wasm::set_as_global_default_with_config(cfg.build());
+    dioxus::launch(App);
 }

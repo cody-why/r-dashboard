@@ -1,117 +1,93 @@
 /*
- * @Author: plucky
- * @Date: 2022-10-12 00:00:54
- * @LastEditTime: 2022-10-14 16:54:55
- * @Description: 
- */
+* @Date: 2022-10-12 00:00:54
+ * @LastEditTime: 2024-07-05 20:06:58
+* @Description:
+*/
 use dioxus::prelude::*;
 
-pub fn view(cx: Scope)->Element{
-    let email = use_state(&cx, ||"".to_string());
-    let password = use_state(&cx, ||"".to_string());
-    // function login() {
-    //     router.push("/dashboard");
-    //   }
-    let router = use_router(&cx);
-    
-    cx.render(rsx!{
-        div {
-            class: "flex items-center justify-center h-screen px-6 bg-gray-200",
-            div {
-                class: "w-full max-w-sm p-6 bg-white rounded-md shadow-md",
-                div {
-                    class: "flex items-center justify-center",
+pub fn view() -> Element {
+    let mut email = use_signal(|| "".to_string());
+    let mut password = use_signal(|| "".to_string());
+
+    fn login() {
+        let router = router();
+        router.push("/home");
+    }
+
+    rsx! {
+        div { class: "flex items-center justify-center h-screen px-6 bg-gray-200",
+            div { class: "w-full max-w-sm p-6 bg-white rounded-md shadow-md",
+                div { class: "flex items-center justify-center",
                     icons::icon_1 {}
-                    span {
-                        class: "text-2xl font-semibold text-gray-700",
-                        "V-Dashboard"
-                    }
+                    span { class: "text-2xl font-semibold text-gray-700", "R-Dashboard" }
                 }
-                
-                form{
+
+                form {
                     class: "mt-4",
-                    //@submit.prevent="login"
-                    onsubmit: move |_|{
-                        // login();
-                        router.push_route("/dashboard", None, None);
+                    onsubmit: move |_| {
+                        login();
                     },
-                    label {
-                        class: "block",
-                        span {
-                            class: "text-sm text-gray-700",
-                            "Email"
-                        }
+                    label { class: "block",
+                        span { class: "text-sm text-gray-700", "Email" }
                         input {
-                            class: "block w-full mt-1 border-gray-200 rounded-md focus:border-indigo-600 focus:ring focus:ring-opacity-40 focus:ring-indigo-500",
+                            class: "block w-full mt-1 c-input",
                             r#type: "email",
-                            // "v-model": "email",
                             placeholder: "Enter your email",
-                            // value: "{email}",
+                            value: "{email}",
                             oninput: move |e| {
-                                email.set(e.value.clone());
-                            },
+                                email.set(e.value());
+                            }
                         }
                     }
-                    label {
-                        class: "block mt-3",
-                        span {
-                            class: "text-sm text-gray-700",
-                            "Password"
-                        }
+                    label { class: "block mt-3",
+                        span { class: "text-sm text-gray-700", "Password" }
                         input {
-                            class: "block w-full mt-1 border-gray-200 rounded-md focus:border-indigo-600 focus:ring focus:ring-opacity-40 focus:ring-indigo-500",
+                            class: "block w-full mt-1 c-input",
                             r#type: "password",
-                            // "v-model": "password",
                             placeholder: "Enter your password",
                             value: "{password}",
                             oninput: move |e| {
-                                password.set(e.value.clone());
-                            },
+                                password.set(e.value());
+                            }
                         }
                     }
-                    div {
-                        class: "flex items-center justify-between mt-4",
+                    div { class: "flex items-center justify-between mt-4",
                         div {
-                            label {
-                                class: "inline-flex items-center",
+                            label { class: "inline-flex items-center",
                                 input {
-                                    class: "text-indigo-600 border-gray-200 rounded-md focus:border-indigo-600 focus:ring focus:ring-opacity-40 focus:ring-indigo-500",
-                                    r#type: "checkbox",
+                                    class: "text-indigo-600 c-input",
+                                    r#type: "checkbox"
                                 }
-                                span {
-                                    class: "mx-2 text-sm text-gray-600",
-                                    "Remember me"
-                                }
+                                span { class: "mx-2 text-sm text-gray-600", "Remember me" }
                             }
                         }
                         div {
                             a {
                                 class: "block text-sm text-indigo-700 fontme hover:underline",
-                                href: "#", "Forgot your password?"
+                                href: "#",
+                                "Forgot your password?"
                             }
                         }
                     }
-                    div {
-                        class: "mt-6",
+                    div { class: "mt-6",
                         button {
                             class: "w-full px-4 py-2 text-sm text-center text-white bg-indigo-600 rounded-md focus:outline-none hover:bg-indigo-500",
-                            r#type: "submit", "Sign in"
+                            r#type: "submit",
+                            "Sign in"
                         }
                     }
                 }
             }
         }
-    })
+    }
 }
 
-
-
-mod icons{
+mod icons {
     use dioxus::prelude::*;
     use dioxus_html_macro::html;
 
-    pub fn icon_1(cx: Scope)->Element{
-        cx.render(html!{
+    pub fn icon_1() -> Element {
+        html! {
             <svg
                 class="w-10 h-10"
                 view_box="0 0 512 512"
@@ -131,8 +107,6 @@ mod icons{
                     fill="white"
                 />
             </svg>
-    })
+        }
     }
-    
-
 }

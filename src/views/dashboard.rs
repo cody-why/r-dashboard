@@ -1,273 +1,204 @@
 /*
- * @Author: plucky
- * @Date: 2022-10-14 12:31:43
- * @LastEditTime: 2022-10-17 09:02:01
- * @Description: 
- */
-
+* @Date: 2022-10-14 12:31:43
+ * @LastEditTime: 2024-07-05 12:56:53
+* @Description:
+*/
 
 use dioxus::prelude::*;
 
 use crate::modules::User;
 
 // test data
-pub static USERS: Atom<Vec<User>> = |_| {
-    (0..5).map(|_i| {
-        User {
+pub static USERS: GlobalSignal<Vec<User>> = Signal::global(|| {
+    (0..5)
+        .map(|_i| User {
             name: "John Doe".into(),
             email: "john@example.com".into(),
             title: "Software Engineer".into(),
             title2: "Web dev".into(),
             status: "Active".into(),
             role: "Owner".into(),
-        }
-    }).collect()
-};
+        })
+        .collect()
+});
 
-pub fn view(cx: Scope)->Element{
-    let users = use_read(&cx, USERS);
-   
-    cx.render(rsx!{
+pub fn view() -> Element {
+    let users = use_hook(|| USERS.signal());
+
+    rsx! {
         div {
-            h3 {
-                class: "text-3xl font-medium text-gray-700",
-                "Dashboard"
-            }
-            div {
-                class: "mt-4",
-                div {
-                    class: "flex flex-wrap -mx-6",
-                    div {
-                        class: "w-full px-6 sm:w-1/2 xl:w-1/3",
-                        div {
-                            class: "flex items-center px-5 py-6 bg-white rounded-md shadow-sm",
-                            div {
-                                class: "p-3 bg-indigo-600 bg-opacity-75 rounded-full",
+            h3 { class: "text-3xl font-medium text-gray-700", "Dashboard" }
+            div { class: "mt-4",
+                div { class: "flex flex-wrap -mx-6",
+                    div { class: "w-full px-6 sm:w-1/2 xl:w-1/3",
+                        div { class: "flex items-center px-5 py-6 bg-white rounded-md shadow-sm",
+                            div { class: "p-3 bg-indigo-600 bg-opacity-75 rounded-full",
                                 icons::icon_1 {}
                             }
-                            div {
-                                class: "mx-5",
-                                h4 {
-                                    class: "text-2xl font-semibold text-gray-700",
+                            div { class: "mx-5",
+                                h4 { class: "text-2xl font-semibold text-gray-700",
                                     "8,282"
                                 }
-                                div {
-                                    class: "text-gray-500",
-                                    "New Users"
-                                }
+                                div { class: "text-gray-500", "New Users" }
                             }
                         }
                     }
-                    div {
-                        class: "w-full px-6 mt-6 sm:w-1/2 xl:w-1/3 sm:mt-0",
-                        div {
-                            class: "flex items-center px-5 py-6 bg-white rounded-md shadow-sm",
-                            div {
-                                class: "p-3 bg-blue-600 bg-opacity-75 rounded-full",
+                    div { class: "w-full px-6 mt-6 sm:w-1/2 xl:w-1/3 sm:mt-0",
+                        div { class: "flex items-center px-5 py-6 bg-white rounded-md shadow-sm",
+                            div { class: "p-3 bg-blue-600 bg-opacity-75 rounded-full",
                                 icons::icon_2 {}
                             }
-                            div {
-                                class: "mx-5",
-                                h4 {
-                                    class: "text-2xl font-semibold text-gray-700",
+                            div { class: "mx-5",
+                                h4 { class: "text-2xl font-semibold text-gray-700",
                                     "200,521"
                                 }
-                                div {
-                                    class: "text-gray-500",
-                                    "Total Orders"
-                                }
+                                div { class: "text-gray-500", "Total Orders" }
                             }
                         }
                     }
-                    div {
-                        class: "w-full px-6 mt-6 sm:w-1/2 xl:w-1/3 xl:mt-0",
-                        div {
-                            class: "flex items-center px-5 py-6 bg-white rounded-md shadow-sm",
-                            div {
-                                class: "p-3 bg-pink-600 bg-opacity-75 rounded-full",
+                    div { class: "w-full px-6 mt-6 sm:w-1/2 xl:w-1/3 xl:mt-0",
+                        div { class: "flex items-center px-5 py-6 bg-white rounded-md shadow-sm",
+                            div { class: "p-3 bg-pink-600 bg-opacity-75 rounded-full",
                                 icons::icon_3 {}
                             }
-                            div {
-                                class: "mx-5",
-                                h4 {
-                                    class: "text-2xl font-semibold text-gray-700",
+                            div { class: "mx-5",
+                                h4 { class: "text-2xl font-semibold text-gray-700",
                                     "215,542"
                                 }
-                                div {
-                                    class: "text-gray-500",
-                                    "Available Products"
-                                }
+                                div { class: "text-gray-500", "Available Products" }
                             }
                         }
                     }
                 }
             }
-            div {
-                class: "mt-8",
-                
-            }
+            div { class: "mt-8" }
 
-            div {
-                class: "flex flex-col mt-8",
-                div {
-                    class: "py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8",
-                    div {
-                        class: "inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg",
-                        table {
-                            class: "min-w-full",
+            div { class: "flex flex-col mt-8",
+                div { class: "py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8",
+                    div { class: "inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg",
+                        table { class: "min-w-full",
                             thead {
                                 tr {
-                                    th {
-                                        class: "px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50",
+                                    th { class: "px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50",
                                         "Name"
                                     }
-                                    th {
-                                        class: "px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50",
+                                    th { class: "px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50",
                                         "Title"
                                     }
-                                    th {
-                                        class: "px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50",
+                                    th { class: "px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50",
                                         "Status"
                                     }
-                                    th {
-                                        class: "px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50",
+                                    th { class: "px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50",
                                         "Role"
                                     }
-                                    th {
-                                        class: "px-6 py-3 border-b border-gray-200 bg-gray-50",
-                                        
-                                    }
+                                    th { class: "px-6 py-3 border-b border-gray-200 bg-gray-50" }
                                 }
                             }
                             // 表格数据
-                            tbody {
-                                class: "bg-white",
-                                users.iter().map(|u|{
-                                    rsx!{ UserList{user:u}}
+                            tbody { class: "bg-white",
+                                {users}.iter().map(|u|{
+                                    rsx!{ UserList{user:u.clone()}}
                                 })
-
                             }
                         }
                     }
                 }
             }
         }
-    })
+    }
 }
 
-// #[derive(PartialEq, Props)]
-// pub struct UserListProps<'a>{
-//     user: &'a User,
+// #[derive(PartialEq, Clone, Props)]
+// pub struct UserListProps {
+//     user: User,
 // }
 
 #[allow(non_snake_case)]
-#[inline_props]
-pub fn UserList<'a>(cx: Scope<UserListProps>, user: &'a User) -> Element {
+#[component]
+pub fn UserList(user: User) -> Element {
     // let u = cx.props.user;
     let u = user;
-    cx.render(rsx!{
+    rsx! {
         tr {
             // key: "{index}",
-            td {
-                class: "px-6 py-4 border-b border-gray-200 whitespace-nowrap",
-                div {
-                    class: "flex items-center",
-                    div {
-                        class: "flex-shrink-0 w-10 h-10",
+            td { class: "px-6 py-4 border-b border-gray-200 whitespace-nowrap",
+                div { class: "flex items-center",
+                    div { class: "flex-shrink-0 w-10 h-10",
                         img {
                             class: "w-10 h-10 rounded-full",
                             alt: "",
-                            src: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+                            src: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                         }
                     }
-                    div {
-                        class: "ml-4",
-                        div {
-                            class: "text-sm font-medium leading-5 text-gray-900",
+                    div { class: "ml-4",
+                        div { class: "text-sm font-medium leading-5 text-gray-900",
                             "{ u.name }"
                         }
-                        div {
-                            class: "text-sm leading-5 text-gray-500",
-                            "{ u.email }"
-                        }
+                        div { class: "text-sm leading-5 text-gray-500", "{ u.email }" }
                     }
                 }
             }
-            td {
-                class: "px-6 py-4 border-b border-gray-200 whitespace-nowrap",
-                div {
-                    class: "text-sm leading-5 text-gray-900",
-                    "{ u.title }"
-                }
-                div {
-                    class: "text-sm leading-5 text-gray-500",
-                    "{ u.title2 }"
-                }
+            td { class: "px-6 py-4 border-b border-gray-200 whitespace-nowrap",
+                div { class: "text-sm leading-5 text-gray-900", "{ u.title }" }
+                div { class: "text-sm leading-5 text-gray-500", "{ u.title2 }" }
             }
-            td {
-                class: "px-6 py-4 border-b border-gray-200 whitespace-nowrap",
-                span {
-                    class: "inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full",
+            td { class: "px-6 py-4 border-b border-gray-200 whitespace-nowrap",
+                span { class: "inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full",
                     "{ u.status }"
                 }
             }
-            td {
-                class: "px-6 py-4 text-sm leading-5 text-gray-500 border-b border-gray-200 whitespace-nowrap",
+            td { class: "px-6 py-4 text-sm leading-5 text-gray-500 border-b border-gray-200 whitespace-nowrap",
                 "{ u.role }"
             }
-            td {
-                class: "px-6 py-4 text-sm font-medium leading-5 text-right border-b border-gray-200 whitespace-nowrap",
-                a {
-                    class: "text-indigo-600 hover:text-indigo-900",
-                    href: "#","Edit"
-                }
+            td { class: "px-6 py-4 text-sm font-medium leading-5 text-right border-b border-gray-200 whitespace-nowrap",
+                a { class: "text-indigo-600 hover:text-indigo-900", href: "#", "Edit" }
             }
         }
-    })
+    }
 }
 
-mod icons{
+mod icons {
     use dioxus::prelude::*;
     use dioxus_html_macro::html;
 
-    pub fn icon_1(cx: Scope)->Element{
-        cx.render(html!{
-            <svg
-                  class="w-8 h-8 text-white"
-                  view_box="0 0 28 30"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M18.2 9.08889C18.2 11.5373 16.3196 13.5222 14 13.5222C11.6804 13.5222 9.79999 11.5373 9.79999 9.08889C9.79999 6.64043 11.6804 4.65556 14 4.65556C16.3196 4.65556 18.2 6.64043 18.2 9.08889Z"
-                    fill="currentColor"
-                  />
-                  <path
-                    d="M25.2 12.0444C25.2 13.6768 23.9464 15 22.4 15C20.8536 15 19.6 13.6768 19.6 12.0444C19.6 10.4121 20.8536 9.08889 22.4 9.08889C23.9464 9.08889 25.2 10.4121 25.2 12.0444Z"
-                    fill="currentColor"
-                  />
-                  <path
-                    d="M19.6 22.3889C19.6 19.1243 17.0927 16.4778 14 16.4778C10.9072 16.4778 8.39999 19.1243 8.39999 22.3889V26.8222H19.6V22.3889Z"
-                    fill="currentColor"
-                  />
-                  <path
-                    d="M8.39999 12.0444C8.39999 13.6768 7.14639 15 5.59999 15C4.05359 15 2.79999 13.6768 2.79999 12.0444C2.79999 10.4121 4.05359 9.08889 5.59999 9.08889C7.14639 9.08889 8.39999 10.4121 8.39999 12.0444Z"
-                    fill="currentColor"
-                  />
-                  <path
-                    d="M22.4 26.8222V22.3889C22.4 20.8312 22.0195 19.3671 21.351 18.0949C21.6863 18.0039 22.0378 17.9556 22.4 17.9556C24.7197 17.9556 26.6 19.9404 26.6 22.3889V26.8222H22.4Z"
-                    fill="currentColor"
-                  />
-                  <path
-                    d="M6.64896 18.0949C5.98058 19.3671 5.59999 20.8312 5.59999 22.3889V26.8222H1.39999V22.3889C1.39999 19.9404 3.2804 17.9556 5.59999 17.9556C5.96219 17.9556 6.31367 18.0039 6.64896 18.0949Z"
-                    fill="currentColor"
-                  />
-                </svg>
-    })
+    pub fn icon_1() -> Element {
+        html! {
+                <svg
+                      class="w-8 h-8 text-white"
+                      view_box="0 0 28 30"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M18.2 9.08889C18.2 11.5373 16.3196 13.5222 14 13.5222C11.6804 13.5222 9.79999 11.5373 9.79999 9.08889C9.79999 6.64043 11.6804 4.65556 14 4.65556C16.3196 4.65556 18.2 6.64043 18.2 9.08889Z"
+                        fill="currentColor"
+                      />
+                      <path
+                        d="M25.2 12.0444C25.2 13.6768 23.9464 15 22.4 15C20.8536 15 19.6 13.6768 19.6 12.0444C19.6 10.4121 20.8536 9.08889 22.4 9.08889C23.9464 9.08889 25.2 10.4121 25.2 12.0444Z"
+                        fill="currentColor"
+                      />
+                      <path
+                        d="M19.6 22.3889C19.6 19.1243 17.0927 16.4778 14 16.4778C10.9072 16.4778 8.39999 19.1243 8.39999 22.3889V26.8222H19.6V22.3889Z"
+                        fill="currentColor"
+                      />
+                      <path
+                        d="M8.39999 12.0444C8.39999 13.6768 7.14639 15 5.59999 15C4.05359 15 2.79999 13.6768 2.79999 12.0444C2.79999 10.4121 4.05359 9.08889 5.59999 9.08889C7.14639 9.08889 8.39999 10.4121 8.39999 12.0444Z"
+                        fill="currentColor"
+                      />
+                      <path
+                        d="M22.4 26.8222V22.3889C22.4 20.8312 22.0195 19.3671 21.351 18.0949C21.6863 18.0039 22.0378 17.9556 22.4 17.9556C24.7197 17.9556 26.6 19.9404 26.6 22.3889V26.8222H22.4Z"
+                        fill="currentColor"
+                      />
+                      <path
+                        d="M6.64896 18.0949C5.98058 19.3671 5.59999 20.8312 5.59999 22.3889V26.8222H1.39999V22.3889C1.39999 19.9404 3.2804 17.9556 5.59999 17.9556C5.96219 17.9556 6.31367 18.0039 6.64896 18.0949Z"
+                        fill="currentColor"
+                      />
+                    </svg>
+        }
     }
-    
-    pub fn icon_2(cx: Scope)->Element{
-        cx.render(html!{
+
+    pub fn icon_2() -> Element {
+        html! {
             <svg
                   class="w-8 h-8 text-white"
                   view_box="0 0 28 28"
@@ -287,11 +218,11 @@ mod icons{
                     fill="currentColor"
                   />
                 </svg>
-        })
+        }
     }
 
-    pub fn icon_3(cx: Scope)->Element{
-        cx.render(html!{
+    pub fn icon_3() -> Element {
+        html! {
             <svg
                   class="w-8 h-8 text-white"
                   view_box="0 0 28 28"
@@ -311,7 +242,6 @@ mod icons{
                     stroke_width="2"
                   />
                 </svg>
-        })
+        }
     }
-
 }

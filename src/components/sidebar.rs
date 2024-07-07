@@ -1,165 +1,126 @@
 /*
- * @Author: plucky
  * @Date: 2022-10-11 18:53:17
- * @LastEditTime: 2022-10-17 09:52:40
- * @Description: 
+ * @LastEditTime: 2024-07-07 21:42:00
+ * @Description:
  */
 
 use dioxus::prelude::*;
-use dioxus::prelude::Atom;
 
-pub static IS_SIDEBAR_OPEN: Atom<bool> = |_| false;
+use super::SIDEBAR_OPEN;
 
-pub fn view(cx:Scope)->Element{
-    let route = use_route(&cx);
-    let route_name = route.last_segment().unwrap_or_default();
-    
-    let set_sidebar_open = use_set(&cx,IS_SIDEBAR_OPEN);
-    let is_sidebar_open = use_read(&cx,IS_SIDEBAR_OPEN);
+pub fn view() -> Element {
+    let route = router();
+    let route_name = route.current_route_string();
+    // 共享状态
+    let mut sidebar_open = use_hook(|| SIDEBAR_OPEN.signal());
+    let mut menu_open = use_signal(|| vec![false, false]);
 
-    let is_menu_open = use_ref(&cx,||vec![false,false]);
-
-    let highlight_class = |e:&str|{
+    let highlight_class = |e: &str| {
         match e == route_name {
             true => "flex items-center px-6 py-2 mt-4 duration-200 border-l-4 bg-gray-600 bg-opacity-25 text-gray-100 border-gray-100",
             false => "flex items-center px-6 py-2 mt-4 duration-200 border-l-4 border-gray-900 text-gray-500 hover:bg-gray-600 hover:bg-opacity-25 hover:text-gray-100",
         }
     };
 
-    cx.render(rsx!(
-        //  class: format_args!("flex  {} bg-gray-900  ",if *is_sidebar_open { "" } else { "hidden lg:block" }),
-        // mask
-        div{
-            onclick: move |_| {
-                set_sidebar_open(false);
-            },
-            class: format_args!("fixed inset-0 z-20 transition-opacity bg-black opacity-50 lg:hidden {}",if *is_sidebar_open {"block"} else {"hidden"}),
-            // hidden: format_args!("{}",!is_sidebar_open),
+    let toggle_sidebar = if sidebar_open() {
+        "translate-x-0 ease-out"
+    } else {
+        "-translate-x-full ease-in"
+    };
 
+    rsx!(
+        // this mask click then sidebar will be closed
+        div {
+            onmouseover: move |_| {
+                sidebar_open.set(false);
+            },
+            class: "fixed inset-0 left-14 z-20 bg-black opacity-10 lg:hidden",
+            hidden: !sidebar_open()
         }
 
         // sidebar
-        div{
-            class: format_args!("fixed inset-y-0 left-0 z-30 w-56 overflow-y-auto transition duration-300 transform bg-gray-900 lg:translate-x-0 lg:static lg:inset-0 {}", 
-            if *is_sidebar_open { "translate-x-0 ease-out " } else {"-translate-x-full ease-in"  }),
-            
+        div {
+            class: "fixed inset-y-0 left-0 z-30 w-50 overflow-y-auto transition duration-300 bg-gray-900 lg:translate-x-0 lg:static lg:inset-0 {toggle_sidebar}",
+
             // title
-            div {
-                class: "flex items-center justify-center mt-8 ",
-                div {
-                    class: "flex items-center",
-                    icons::icon_1 {}
-                    span {
-                        class: "mx-2 text-2xl font-semibold text-white",
-                        "R-Dashboard"
-                    }
+            div { class: "flex items-center justify-center mt-8 ",
+                div { class: "flex items-center",
+                    icons::icon_logo {}
+                    span { class: "hidden lg:block mx-2 text-2xl font-semibold text-white", "Dashboard" }
                 }
             }
             // menu
-            nav{
-                class: "mt-10 ",//
-                // router-link
-                Link{
-                    class: highlight_class("dashboard"),
-                    //to="/dashboard"
-                    to: "/dashboard",
-                    icons::icon_2 {}
-                    span{class:"mx-4","Dashboard"}
+            nav { class: "mt-10 ",
+                Link { class: highlight_class("dashboard"), to: "/dashboard",
+                    icons::icon_chart {}
+                    span { class: "mx-4", "Dashboard" }
                 }
-                Link{
-                    class: highlight_class("ui-elements"),
-                    to: "/ui-elements",
-                    icons::icon_3 {}
-                    span{class:"mx-4","UI Elements"}
+                Link { class: highlight_class("ui-elements"), to: "/ui-elements",
+                    icons::icon_win {}
+                    span { class: "mx-4", "UI Elements" }
                 }
-                Link{
-                    class: highlight_class("tables"),
-                    to: "/tables",
-                    icons::icon_4 {}
-                    span{class:"mx-4","Tables"}
+                Link { class: highlight_class("tables"), to: "/tables",
+                    icons::icon_table {}
+                    span { class: "mx-4", "Tables" }
                 }
-                Link{
-                    class: highlight_class("forms"),
-                    to: "/forms",
-                    icons::icon_5 {}
-                    span{class:"mx-4","Forms"}
+                Link { class: highlight_class("forms"), to: "/forms",
+                    icons::icon_form {}
+                    span { class: "mx-4", "Forms" }
                 }
-                Link{
-                    class: highlight_class("cards"),
-                    to: "/cards",
-                    icons::icon_6 {}
-                    span{class:"mx-4","Cards"}
+                Link { class: highlight_class("cards"), to: "/cards",
+                    icons::icon_card {}
+                    span { class: "mx-4", "Cards" }
                 }
-                Link{
-                    class: highlight_class("modal"),
-                    to: "/modal",
-                    icons::icon_7 {}
-                    span{class:"mx-4","Modal"}
+                Link { class: highlight_class("modal"), to: "/modal",
+                    icons::icon_model {}
+                    span { class: "mx-4", "Modal" }
                 }
-                
-                Link{
-                    class: highlight_class("blank"),
-                    to: "/blank",
-                    icons::icon_8 {}
-                    span{class:"mx-4","Blank"}
+
+                Link { class: highlight_class("blank"), to: "/blank",
+                    icons::icon_blank {}
+                    span { class: "mx-4", "Blank" }
                 }
-                
+
                 // ul{li{}}
-                div{
-                    div{
+                div {
+                    div {
                         class: "flex items-center px-6 py-2 mt-4 duration-200 border-l-4 border-gray-900 text-gray-500 hover:bg-gray-600 hover:bg-opacity-25 hover:text-gray-100 cursor-pointer",
                         onclick: move |_| {
-                            let mut is_menu_open = is_menu_open.write();
+                            let mut is_menu_open = menu_open.write();
                             is_menu_open[0] = !is_menu_open[0];
                         },
 
-                        div {
-                            class: "flex items-center space-x-4",
-                            icons::icon_2 {}
-                            span {
-                                "Test"
-                            }
-                            div{
-                                class: format_args!{"{}",if is_menu_open.read()[0] {"rotate-180"} else {""}} ,
+                        div { class: "flex items-center space-x-4",
+                            icons::icon_chart {}
+                            span { "Test" }
+                            div { class: format!("{}", if menu_open()[0] { "rotate-180" } else { "" }),
                                 icons::icon_up_down {}
                             }
                         }
                     }
-                    
-                    div{
-                        class: format_args!("ml-8 mt-1 {}", if is_menu_open.read()[0] {"block"} else {"hidden"}),
-                        Link{
-                            class: highlight_class("blank"),
-                            to: "/blank",
-                            icons::icon_8 {}
-                            span{class:"mx-4","Blank"}
+
+                    div { class: format!("ml-8 mt-1 {}", if menu_open()[0] { "block" } else { "hidden" }),
+                        Link { class: highlight_class("blank"), to: "/blank",
+                            icons::icon_blank {}
+                            span { class: "mx-4", "Blank" }
                         }
-                        Link{
-                            class: highlight_class("blank2"),
-                            to: "/blank",
-                            icons::icon_8 {}
-                            span{class:"mx-4","Blank"}
+                        Link { class: highlight_class("blank2"), to: "/blank",
+                            icons::icon_blank {}
+                            span { class: "mx-4", "Blank" }
                         }
                     }
-                    
                 }
-                //  end
-
             }
-
-            
-
         }
-    ))
-    
+    )
 }
 
-mod icons{
+mod icons {
     use dioxus::prelude::*;
     use dioxus_html_macro::html;
 
-    pub fn icon_1(cx: Scope)->Element{
-        cx.render(html!{
+    pub fn icon_logo() -> Element {
+        html! {
             <svg
                 class="w-12 h-12"
                 view_box="0 0 512 512"
@@ -179,10 +140,10 @@ mod icons{
                   fill="white"
                 />
             </svg>
-        })
+        }
     }
-    pub fn icon_2(cx:Scope)->Element{
-        cx.render(html!{
+    pub fn icon_chart() -> Element {
+        html! {
             <svg
                 class="w-5 h-5"
                 view_box="0 0 20 20"
@@ -198,11 +159,11 @@ mod icons{
                   fill="currentColor"
                 />
             </svg>
-        })
+        }
     }
 
-    pub fn icon_3(cx:Scope)->Element{
-        cx.render(html!(
+    pub fn icon_win() -> Element {
+        html!(
             <svg
                 class="w-5 h-5"
                 view_box="0 0 20 20"
@@ -226,11 +187,11 @@ mod icons{
                   fill="currentColor"
                 />
             </svg>
-        ))
+        )
     }
 
-    pub fn icon_4(cx:Scope)->Element{
-        cx.render(html!(
+    pub fn icon_table() -> Element {
+        html!(
             <svg
                 class="w-5 h-5"
                 view_box="0 0 20 20"
@@ -250,11 +211,11 @@ mod icons{
                   fill="currentColor"
                 />
             </svg>
-        ))
+        )
     }
 
-    pub fn icon_5(cx:Scope)->Element{
-        cx.render(html!(
+    pub fn icon_form() -> Element {
+        html!(
             <svg class="w-5 h-5" fill="currentColor" view_box="0 0 20 20">
                 <path
                   d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"
@@ -265,48 +226,47 @@ mod icons{
                   clip_rule="evenodd"
                 />
             </svg>
-        ))
+        )
     }
 
-    pub fn icon_6(cx:Scope)->Element{
-        cx.render(html!(
+    pub fn icon_card() -> Element {
+        html!(
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" view_box="0 0 20 20" fill="currentColor">
                 <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
-                <path fill_rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" 
+                <path fill_rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z"
                 clip_rule="evenodd" />
             </svg>
-        ))
+        )
     }
 
-    pub fn icon_7(cx:Scope)->Element{
-        cx.render(html!(
+    pub fn icon_model() -> Element {
+        html!(
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" view_box="0 0 20 20" fill="currentColor">
               <path d="M3 12v3c0 1.657 3.134 3 7 3s7-1.343 7-3v-3c0 1.657-3.134 3-7 3s-7-1.343-7-3z" />
               <path d="M3 7v3c0 1.657 3.134 3 7 3s7-1.343 7-3V7c0 1.657-3.134 3-7 3S3 8.657 3 7z" />
               <path d="M17 5c0 1.657-3.134 3-7 3S3 6.657 3 5s3.134-3 7-3 7 1.343 7 3z" />
             </svg>
-        ))
+        )
     }
 
-    pub fn icon_8(cx:Scope)->Element{
-        cx.render(html!(
+    pub fn icon_blank() -> Element {
+        html!(
             <svg class="w-5 h-5" fill="currentColor" view_box="0 0 20 20">
                 <path
                   d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"
                 />
             </svg>
-        ))
+        )
     }
 
     // #[inline_props]
-    pub fn icon_up_down(cx:Scope)->Element{
-        cx.render(html!(
+    pub fn icon_up_down() -> Element {
+        html!(
             <svg class="w-3 h-3"
                 fill="currentColor"
                 view_box="0 0 12 12">
                 <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z"></path>
             </svg>
-        ))
+        )
     }
 }
-

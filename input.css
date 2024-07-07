@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track{
+  background: #2D3748;
+}
+
+::-webkit-scrollbar-thumb{
+  background: #CBD5E0;
+}
+
+::-webkit-scrollbar-thumb:hover{
+  background: #718096;
+}
+
+
+.c-input {
+  @apply border-gray-200 rounded-md focus:border-indigo-600 focus:ring-1 focus:ring-opacity-40 focus:ring-indigo-500
+}
+
+
+.c-bubble {
+  /* @apply invisible opacity-0 absolute right-0 z-20 w-48 py-2 mt-2 bg-white rounded-md shadow-xl */
+  /* transition duration-200 ease-in-out */
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  z-index: 20;
+  width: 128px;
+  padding: 2px;
+  margin-top: 4px;
+  background-color: white;
+  border-radius: 5px; 
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+  transition: visibility 0.2s, opacity 0.2s ease-in-out;
+}
+/* 添加小箭头 */
+.c-bubble::before {
+  content: "";
+  position: absolute;
+  top: -10px; 
+  right: 15%;
+  transform: translateX(50%); 
+  border: 5px solid transparent;
+  border-bottom-color: white; 
+}

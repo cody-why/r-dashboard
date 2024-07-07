@@ -1,24 +1,22 @@
 /*
- * @Author: plucky
  * @Date: 2022-10-14 18:11:55
- * @LastEditTime: 2022-10-14 23:48:07
- * @Description: 
+ * @LastEditTime: 2024-07-05 12:38:05
+ * @Description:
  */
 
-use dioxus::prelude::Atom;
+use dioxus::signals::{GlobalSignal, Signal};
 
 use super::*;
 
-
-pub struct UseTableData{
+#[derive(Clone, PartialEq)]
+pub struct UseTableData {
     pub simpleTableData: Vec<SimpleTableData>,
     pub paginatedTableData: Vec<PaginatedTableData>,
     pub wideTableData: Vec<WideTableData>,
-    
 }
 
 /// 表格测试数据 for tables
-pub static USE_TABLE_DATA: Atom<UseTableData> = |_| {
+pub static USE_TABLE_DATA: GlobalSignal<UseTableData> = Signal::global(|| {
     UseTableData{
         simpleTableData: vec![
             SimpleTableData{
@@ -79,4 +77,4 @@ pub static USE_TABLE_DATA: Atom<UseTableData> = |_| {
             }
         }).collect(),
     }
-};
+});

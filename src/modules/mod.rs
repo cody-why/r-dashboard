@@ -3,7 +3,7 @@
 pub mod demo_data;
 
 /// USERS for dashboard
-#[derive(Debug )]
+#[derive(Debug, Clone, PartialEq)]
 pub struct User {
     pub name: String,
     pub email: String,
@@ -14,12 +14,12 @@ pub struct User {
 }
 
 /// simple data for talbes
+#[derive(Debug, Clone, PartialEq)]
 pub struct SimpleTableData {
     pub city: String,
     pub totalOrders: String,
 }
-
-
+#[derive(Debug, Clone, PartialEq)]
 pub struct PaginatedTableData {
     pub picture: String,
     pub name: String,
@@ -28,8 +28,7 @@ pub struct PaginatedTableData {
     pub status: String,
     pub statusColor: String,
 }
- 
-
+#[derive(Debug, Clone, PartialEq)]
 pub struct WideTableData {
     pub name: String,
     pub email: String,

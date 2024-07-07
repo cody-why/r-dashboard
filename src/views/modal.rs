@@ -1,43 +1,38 @@
 /*
- * @Author: plucky
- * @Date: 2022-10-15 09:52:14
- * @LastEditTime: 2022-10-17 00:31:51
- * @Description: 
- */
+* @Date: 2022-10-15 09:52:14
+ * @LastEditTime: 2024-07-07 21:21:12
+* @Description:
+*/
 
 use dioxus::prelude::*;
 
-pub fn view(cx: Scope)->Element{
-    let open = use_state(&cx, || false);
+pub fn view() -> Element {
+    let mut open = use_signal(|| false);
     // let modal = "transition: opacity 0.25s ease";
 
-    cx.render(rsx!{
+    rsx! {
         div {
-            h3 {
-                class: "text-3xl font-medium text-gray-700",
-                "Modal"
-            }
+            h3 { class: "text-3xl font-medium text-gray-700", "Modal" }
             // open modal
             button {
                 onclick: move |_| {
                     open.set(true);
-                }, 
+                },
                 class: "px-6 py-3 mt-3 font-medium tracking-wide text-white bg-indigo-600 rounded-md hover:bg-indigo-500 focus:outline-none",
-                "Open Modal",
+                "Open Modal"
             }
-            
+
             // Modal
-            div{
-                class: format_args!("transition:opacity 0.25s ease {} z-50 fixed w-full h-full top-0 left-0 flex items-center justify-center", if *open.get(){"false"}else{"opacity-0 pointer-events-none"}),
+            div {
+                class: format!(
+                    "transition:opacity 0.25s ease {} z-50 fixed w-full h-full top-0 left-0 flex items-center justify-center",
+                    if open() { "false" } else { "opacity-0 pointer-events-none" },
+                ),
                 // overlay
-                div{
-                    class: "absolute w-full h-full bg-gray-900 opacity-50 modal-overlay",
-                }
-            
-        
+                div { class: "absolute w-full h-full bg-gray-900 opacity-50 modal-overlay" }
+
                 //
-                div {
-                    class: "z-50 w-11/12 mx-auto overflow-y-auto bg-white rounded shadow-lg modal-container md:max-w-md",
+                div { class: "z-50 w-11/12 mx-auto overflow-y-auto bg-white rounded shadow-lg modal-container md:max-w-md",
                     // 右上角关闭按钮
                     div {
                         onclick: move |_| {
@@ -45,38 +40,28 @@ pub fn view(cx: Scope)->Element{
                         },
                         class: "absolute top-0 right-0 z-50 flex flex-col items-center mt-4 mr-4 text-sm text-white cursor-pointer modal-close",
                         icons::icon_1 {}
-                        span {
-                            class: "text-sm",
-                            "(Esc)"
-                        }
+                        span { class: "text-sm", "(Esc)" }
                     }
-                    
+
                     //<!-- Add margin if you want to see some of the overlay behind the modal-->
-                    div {
-                        class: "px-6 py-4 text-left modal-content",
+                    div { class: "px-6 py-4 text-left modal-content",
                         //<!--Title-->
-                        div {
-                            class: "flex items-center justify-between pb-3",
-                            p {
-                                class: "text-2xl font-bold",
-                                "Modal Title"
-                            }
-                            div{
+                        div { class: "flex items-center justify-between pb-3",
+                            p { class: "text-2xl font-bold", "Modal Title" }
+                            div {
                                 class: "z-50 cursor-pointer modal-close",
                                 onclick: move |_| {
                                     open.set(false);
                                 },
                                 icons::icon_1 {}
                             }
-                            
                         }
-                    
+
                         //<!--Body-->
-                        p {"Modal content."}
-                        
+                        p { "Modal content." }
+
                         //<!--Footer-->
-                        div {
-                            class: "flex justify-end pt-2",
+                        div { class: "flex justify-end pt-2",
                             button {
                                 onclick: move |_| {
                                     open.set(false);
@@ -96,16 +81,15 @@ pub fn view(cx: Scope)->Element{
                 }
             }
         }
-    })
+    }
 }
 
-
-mod icons{
+mod icons {
     use dioxus::prelude::*;
     use dioxus_html_macro::html;
 
-    pub fn icon_1(cx: Scope)->Element{
-        cx.render(html!{
+    pub fn icon_1() -> Element {
+        html! {
             <svg
                 class="w-5 h-5"
                 fill="none"
@@ -119,8 +103,6 @@ mod icons{
                 d="M6 18L18 6M6 6l12 12"
                 />
             </svg>
-        })
+        }
     }
-    
-
 }

@@ -1,20 +1,20 @@
 [package]
 name = "r-dashboard"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-dioxus = {version = "0.2", features = ["web","router","fermi"]}
+dioxus = {version = "0.5", features = ["web", "router"]} #"fermi"
 console_error_panic_hook = "0.1"
-dioxus-html-macro = "0.2"
+dioxus-html-macro = "0.3"
 
 tracing = "0"
 tracing-wasm = "0"
 
 [profile.release]
-opt-level = 3
+opt-level = 'z'
 lto = true
-# strip = true
+strip = true
 
