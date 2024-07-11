@@ -1,10 +1,15 @@
 /*
  * @Date: 2022-10-14 18:11:55
- * @LastEditTime: 2024-07-05 12:38:05
+ * @LastEditTime: 2024-07-10 22:53:56
  * @Description:
  */
 
 use dioxus::signals::{GlobalSignal, Signal};
+
+use crate::components::{
+    menu::icons,
+    menu::{build_tree, MenuItem},
+};
 
 use super::*;
 
@@ -12,7 +17,6 @@ use super::*;
 pub struct UseTableData {
     pub simpleTableData: Vec<SimpleTableData>,
     pub paginatedTableData: Vec<PaginatedTableData>,
-    pub wideTableData: Vec<WideTableData>,
 }
 
 /// 表格测试数据 for tables
@@ -65,16 +69,109 @@ pub static USE_TABLE_DATA: GlobalSignal<UseTableData> = Signal::global(|| {
                 status: "Inactive".to_string(),
                 statusColor: "red".to_string(),
             },
-        ],
-        wideTableData: (0..5).map(|_i| {
-            WideTableData {
-                name: "John Doe".into(),
-                email: "john@example.com".into(),
-                title: "Software Engineer".into(),
-                title2: "Web dev".into(),
-                status: "Active".into(),
-                role: "Owner".into(),
-            }
-        }).collect(),
+        ]
     }
+});
+
+// test data
+pub static USERS: GlobalSignal<Vec<User>> = Signal::global(|| {
+    (0..5)
+        .map(|_i| User {
+            name: "John Doe".into(),
+            email: "john@example.com".into(),
+            title: "Software Engineer".into(),
+            title2: "Web dev".into(),
+            status: if _i % 2 == 0 { "Active" } else { "Inactive" }.into(),
+            role: "Owner".into(),
+        })
+        .collect()
+});
+
+// test data
+pub static MENUS: GlobalSignal<Vec<MenuItem>> = Signal::global(|| {
+    let data = vec![
+        MenuItem {
+            id: 1,
+            key: "/dashboard".to_string(),
+            label: "Dashboard".to_string(),
+            // icon: "icon_chart".to_string(),
+            icon: icons::icon_chart(),
+            parent_id: 0,
+            children: vec![],
+        },
+        MenuItem {
+            id: 2,
+            key: "/ui-elements".to_string(),
+            label: "UI Elements".to_string(),
+            // icon: "icon_element".to_string(),
+            icon: icons::icon_element(),
+            parent_id: 0,
+            children: vec![],
+        },
+        MenuItem {
+            id: 3,
+            key: "/tables".to_string(),
+            label: "Tables".to_string(),
+            // icon: "icon_table".to_string(),
+            icon: icons::icon_table(),
+            parent_id: 0,
+            children: vec![],
+        },
+        MenuItem {
+            id: 4,
+            key: "/forms".to_string(),
+            label: "Forms".to_string(),
+            // icon: "icon_form".to_string(),
+            icon: icons::icon_form(),
+            parent_id: 0,
+            children: vec![],
+        },
+        MenuItem {
+            id: 5,
+            key: "/cards".to_string(),
+            label: "Cards".to_string(),
+            // icon: "icon_card".to_string(),
+            icon: icons::icon_card(),
+            parent_id: 0,
+            children: vec![],
+        },
+        MenuItem {
+            id: 6,
+            key: "/modal".to_string(),
+            label: "Modal".to_string(),
+            // icon: "icon_model".to_string(),
+            icon: icons::icon_model(),
+            parent_id: 0,
+            children: vec![],
+        },
+        MenuItem {
+            id: 7,
+            key: "#".to_string(),
+            label: "Test".to_string(),
+            // icon: "icon_element".to_string(),
+            icon: icons::icon_element(),
+            parent_id: 0,
+            children: vec![],
+        },
+        MenuItem {
+            id: 8,
+            key: "/blank1".to_string(),
+            label: "Blank".to_string(),
+            // icon: "icon_blank".to_string(),
+            icon: icons::icon_blank(),
+            parent_id: 7,
+            children: vec![],
+        },
+        MenuItem {
+            id: 9,
+            key: "/blank2".to_string(),
+            label: "Blank".to_string(),
+            // icon: "icon_blank".to_string(),
+            icon: icons::icon_blank(),
+            parent_id: 7,
+            children: vec![],
+        },
+    ];
+
+    build_tree(data, 0)
 });

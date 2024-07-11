@@ -1,6 +1,6 @@
 /*
  * @Date: 2022-10-15 00:32:59
- * @LastEditTime: 2024-07-05 20:21:11
+ * @LastEditTime: 2024-07-11 10:47:34
  * @Description:
  */
 
@@ -13,7 +13,7 @@ struct User {
     pub username: String,
     pub email: String,
     pub password: String,
-    pub confirm: String,
+    // pub confirm: String,
 }
 
 pub fn view() -> Element {
@@ -64,7 +64,8 @@ fn Model_form() -> Element {
                                 class: "px-3 py-1 text-sm text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none",
                                 "Cancel"
                             }
-                            button { class: "px-3 py-1 text-sm text-white bg-indigo-600 rounded-md hover:bg-indigo-500 focus:outline-none",
+                            button {
+                                class: "px-3 py-1 text-sm text-white bg-indigo-600 rounded-md hover:bg-indigo-500 focus:outline-none",
                                 "Save"
                             }
                         }
@@ -78,14 +79,10 @@ fn Model_form() -> Element {
 // Forms
 fn Forms() -> Element {
     let mut user = use_signal(User::default);
-    let ur = user.peek();
-    // let User {
-    //     username,
-    //     email,
-    //     password,
-    //     confirm,
-    //     ..
-    // } = &*user.read();
+    let u = user.peek();
+    let mut confirm = use_signal(|| "".to_string());
+
+    let mut errors = use_signal(|| vec![None::<String>; 4]);
 
     rsx! {
         div { class: "mt-8",
@@ -95,11 +92,23 @@ fn Forms() -> Element {
                     h2 { class: "text-lg font-semibold text-gray-700 capitalize", "Account settings" }
 
                     form {
-                        //action="" methods="post"
-                        prevent_default: "onsubmit",
-                        onsubmit: move |e| {
-                            info!("onsubmit: {:?}", e);
-                            info!("onsubmit: {:?}", user.peek());
+                        // prevent_default: "onsubmit",
+                        onsubmit: move |_e| {
+                            info!("onsubmit: {:?}", user);
+                            let u = user.read();
+                            let mut errors = errors.write();
+                            errors[0] = if u.username.is_empty() { Some("Username is required".to_string()) } else { None };
+                            errors[1] = if u.email.is_empty() { Some("Email is required".to_string()) } else { None };
+                            errors[2] = if u.password.is_empty() { Some("Password is required".to_string()) } else { None };
+                            errors[3] = if confirm().is_empty() { Some("Confirm is required".to_string()) } else { None };
+
+                            for e in errors.iter() {
+                                if e.is_some() {
+                                    return;
+                                }
+                            };
+
+                            tracing::info!("onsubmit ok");
                         },
 
                         div { class: "grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2",
@@ -109,15 +118,18 @@ fn Forms() -> Element {
                                     id: "username",
                                     class: "w-full mt-2 c-input",
                                     r#type: "text",
-                                    // "v-model: "user.username",
-                                    // 双向绑定
-                                    value: "{ur.username}",
+                                    value: "{u.username}",
                                     oninput: {
                                         move |e| {
                                             user.write().username = e.value();
                                         }
                                     }
                                 }
+                                {errors()[0].as_ref().map(|error| {
+                                    rsx! {
+                                        p { class: "mt-2 text-sm text-red-600", "{error}" }
+                                    }
+                                })}
                             }
                             div {
                                 label { class: "text-gray-700", r#for: "email", "Email Address" }
@@ -125,13 +137,18 @@ fn Forms() -> Element {
                                     id: "email",
                                     class: "w-full mt-2 c-input",
                                     r#type: "email",
-                                    value: "{ur.email}",
+                                    value: "{u.email}",
                                     oninput: {
                                         move |e| {
                                             user.write().email = e.value();
                                         }
                                     }
                                 }
+                                {errors()[1].as_ref().map(|error| {
+                                    rsx! {
+                                        p { class: "mt-2 text-sm text-red-600", "{error}" }
+                                    }
+                                })}
                             }
                             div {
                                 label { class: "text-gray-700", r#for: "password", "Password" }
@@ -139,13 +156,18 @@ fn Forms() -> Element {
                                     id: "password",
                                     class: "w-full mt-2 c-input",
                                     r#type: "password",
-                                    value: "{ur.password}",
+                                    value: "{u.password}",
                                     oninput: {
                                         move |e| {
                                             user.write().password = e.value();
                                         }
                                     }
                                 }
+                                {errors()[2].as_ref().map(|error| {
+                                    rsx! {
+                                        p { class: "mt-2 text-sm text-red-600", "{error}" }
+                                    }
+                                })}
                             }
                             div {
                                 label {
@@ -157,13 +179,18 @@ fn Forms() -> Element {
                                     id: "pwConfirm",
                                     class: "w-full mt-2 c-input",
                                     r#type: "password",
-                                    value: "{ur.confirm}",
+                                    value: "{confirm}",
                                     oninput: {
                                         move |e| {
-                                            user.write().confirm = e.value();
+                                            confirm.set(e.value());
                                         }
                                     }
                                 }
+                                {errors()[3].as_ref().map(|error| {
+                                    rsx! {
+                                        p { class: "mt-2 text-sm text-red-600", "{error}" }
+                                    }
+                                })}
                             }
                         }
                         div { class: "flex justify-end mt-4",

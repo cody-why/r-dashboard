@@ -1,6 +1,6 @@
 /*
  * @Date: 2022-10-11 00:07:29
- * @LastEditTime: 2024-07-06 18:46:11
+ * @LastEditTime: 2024-07-11 09:37:23
  * @Description:
  */
 #![allow(non_snake_case)]
@@ -26,24 +26,17 @@ fn Login() -> Element {
     login::view()
 }
 
-// fn Dashboard() -> Element {
-//     let router = router();
-//     let url = router.current_route_string();
-//     tracing::warn!("url: {}", url);
-//     Home("dashboard")
-// }
-
 #[component]
 fn NotFound(segments: Vec<String>) -> Element {
     tracing::info!("segments: {:?}", segments);
-    if let Some(url) = segments.get(0) {
+    if let Some(url) = segments.first() {
         Body(url)
     } else {
         Body("dashboard")
     }
 }
 
-// Home Page View
+// Body Page View
 fn Body(url: impl AsRef<str>) -> Element {
     let url = url.as_ref();
     rsx! {

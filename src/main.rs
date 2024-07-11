@@ -1,11 +1,12 @@
 /*
  * @Date: 2022-10-10 23:58:17
- * @LastEditTime: 2024-07-06 18:52:26
+ * @LastEditTime: 2024-07-08 23:28:50
  * @Description:
  */
 pub mod app;
 pub mod components;
 pub mod modules;
+pub mod utils;
 pub mod views;
 
 use app::App;

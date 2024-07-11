@@ -1,6 +1,6 @@
 /*
 * @Date: 2022-10-12 00:00:54
- * @LastEditTime: 2024-07-05 20:06:58
+ * @LastEditTime: 2024-07-11 09:54:59
 * @Description:
 */
 use dioxus::prelude::*;
@@ -8,6 +8,8 @@ use dioxus::prelude::*;
 pub fn view() -> Element {
     let mut email = use_signal(|| "".to_string());
     let mut password = use_signal(|| "".to_string());
+    let mut email_error = use_signal(|| None::<String>);
+    let mut password_error = use_signal(|| None::<String>);
 
     fn login() {
         let router = router();
@@ -25,6 +27,11 @@ pub fn view() -> Element {
                 form {
                     class: "mt-4",
                     onsubmit: move |_| {
+                        email_error.set(if email().is_empty() { Some("Email is required".to_string()) } else { None });
+                        password_error.set(if password().is_empty() { Some("Password is required".to_string())} else {None});
+                        if email().is_empty() || password().is_empty() {
+                            // return;
+                        }
                         login();
                     },
                     label { class: "block",
@@ -38,6 +45,11 @@ pub fn view() -> Element {
                                 email.set(e.value());
                             }
                         }
+                        {email_error().map(|error| {
+                            rsx! {
+                                p { class: "mt-2 text-sm text-red-600", "{error}" }
+                            }
+                        })}
                     }
                     label { class: "block mt-3",
                         span { class: "text-sm text-gray-700", "Password" }
@@ -50,6 +62,11 @@ pub fn view() -> Element {
                                 password.set(e.value());
                             }
                         }
+                        {password_error().map(|error| {
+                            rsx! {
+                                p { class: "mt-2 text-sm text-red-600", "{error}" }
+                            }
+                        })}
                     }
                     div { class: "flex items-center justify-between mt-4",
                         div {

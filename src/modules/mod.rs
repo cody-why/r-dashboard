@@ -1,3 +1,8 @@
+/*
+ * @Date: 2024-07-06 00:18:55
+ * @LastEditTime: 2024-07-09 11:37:47
+ */
+
 #![allow(non_snake_case)]
 
 pub mod demo_data;
@@ -27,13 +32,4 @@ pub struct PaginatedTableData {
     pub created: String,
     pub status: String,
     pub statusColor: String,
-}
-#[derive(Debug, Clone, PartialEq)]
-pub struct WideTableData {
-    pub name: String,
-    pub email: String,
-    pub title: String,
-    pub title2: String,
-    pub status: String,
-    pub role: String,
 }

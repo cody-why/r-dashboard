@@ -1,29 +1,17 @@
 /*
 * @Date: 2022-10-14 12:31:43
- * @LastEditTime: 2024-07-05 12:56:53
+ * @LastEditTime: 2024-07-11 09:10:07
 * @Description:
 */
 
 use dioxus::prelude::*;
 
-use crate::modules::User;
-
-// test data
-pub static USERS: GlobalSignal<Vec<User>> = Signal::global(|| {
-    (0..5)
-        .map(|_i| User {
-            name: "John Doe".into(),
-            email: "john@example.com".into(),
-            title: "Software Engineer".into(),
-            title2: "Web dev".into(),
-            status: "Active".into(),
-            role: "Owner".into(),
-        })
-        .collect()
-});
+use crate::views::chart::*;
 
 pub fn view() -> Element {
-    let users = use_hook(|| USERS.signal());
+    spawn(async move {
+        eval_chart();
+    });
 
     rsx! {
         div {
@@ -33,7 +21,7 @@ pub fn view() -> Element {
                     div { class: "w-full px-6 sm:w-1/2 xl:w-1/3",
                         div { class: "flex items-center px-5 py-6 bg-white rounded-md shadow-sm",
                             div { class: "p-3 bg-indigo-600 bg-opacity-75 rounded-full",
-                                icons::icon_1 {}
+                                icons::icon_users {}
                             }
                             div { class: "mx-5",
                                 h4 { class: "text-2xl font-semibold text-gray-700",
@@ -46,7 +34,7 @@ pub fn view() -> Element {
                     div { class: "w-full px-6 mt-6 sm:w-1/2 xl:w-1/3 sm:mt-0",
                         div { class: "flex items-center px-5 py-6 bg-white rounded-md shadow-sm",
                             div { class: "p-3 bg-blue-600 bg-opacity-75 rounded-full",
-                                icons::icon_2 {}
+                                icons::icon_go {}
                             }
                             div { class: "mx-5",
                                 h4 { class: "text-2xl font-semibold text-gray-700",
@@ -59,7 +47,7 @@ pub fn view() -> Element {
                     div { class: "w-full px-6 mt-6 sm:w-1/2 xl:w-1/3 xl:mt-0",
                         div { class: "flex items-center px-5 py-6 bg-white rounded-md shadow-sm",
                             div { class: "p-3 bg-pink-600 bg-opacity-75 rounded-full",
-                                icons::icon_3 {}
+                                icons::icon_products {}
                             }
                             div { class: "mx-5",
                                 h4 { class: "text-2xl font-semibold text-gray-700",
@@ -73,85 +61,24 @@ pub fn view() -> Element {
             }
             div { class: "mt-8" }
 
-            div { class: "flex flex-col mt-8",
-                div { class: "py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8",
-                    div { class: "inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg",
-                        table { class: "min-w-full",
-                            thead {
-                                tr {
-                                    th { class: "px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50",
-                                        "Name"
-                                    }
-                                    th { class: "px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50",
-                                        "Title"
-                                    }
-                                    th { class: "px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50",
-                                        "Status"
-                                    }
-                                    th { class: "px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50",
-                                        "Role"
-                                    }
-                                    th { class: "px-6 py-3 border-b border-gray-200 bg-gray-50" }
-                                }
-                            }
-                            // 表格数据
-                            tbody { class: "bg-white",
-                                {users}.iter().map(|u|{
-                                    rsx!{ UserList{user:u.clone()}}
-                                })
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
 
-// #[derive(PartialEq, Clone, Props)]
-// pub struct UserListProps {
-//     user: User,
-// }
-
-#[allow(non_snake_case)]
-#[component]
-pub fn UserList(user: User) -> Element {
-    // let u = cx.props.user;
-    let u = user;
-    rsx! {
-        tr {
-            // key: "{index}",
-            td { class: "px-6 py-4 border-b border-gray-200 whitespace-nowrap",
-                div { class: "flex items-center",
-                    div { class: "flex-shrink-0 w-10 h-10",
-                        img {
-                            class: "w-10 h-10 rounded-full",
-                            alt: "",
-                            src: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        }
+            div { class: "flex flex-wrap mt-6",
+                div { class: "w-full lg:w-1/2 pr-0 lg:pr-2",
+                    p { class: "text-xl pb-3 flex items-center",
+                        "Monthly Reports"
                     }
-                    div { class: "ml-4",
-                        div { class: "text-sm font-medium leading-5 text-gray-900",
-                            "{ u.name }"
-                        }
-                        div { class: "text-sm leading-5 text-gray-500", "{ u.email }" }
+                    div { class: "p-6 bg-white",
+                        canvas {id: "chart1" }
                     }
                 }
-            }
-            td { class: "px-6 py-4 border-b border-gray-200 whitespace-nowrap",
-                div { class: "text-sm leading-5 text-gray-900", "{ u.title }" }
-                div { class: "text-sm leading-5 text-gray-500", "{ u.title2 }" }
-            }
-            td { class: "px-6 py-4 border-b border-gray-200 whitespace-nowrap",
-                span { class: "inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full",
-                    "{ u.status }"
+                div { class: "w-full lg:w-1/2 pl-0 lg:pl-2 mt-6 lg:mt-0",
+                    p { class: "text-xl pb-3 flex items-center",
+                        "Resolved Reports"
+                    }
+                    div { class: "p-6 bg-white",
+                        canvas { id: "chart2" }
+                    }
                 }
-            }
-            td { class: "px-6 py-4 text-sm leading-5 text-gray-500 border-b border-gray-200 whitespace-nowrap",
-                "{ u.role }"
-            }
-            td { class: "px-6 py-4 text-sm font-medium leading-5 text-right border-b border-gray-200 whitespace-nowrap",
-                a { class: "text-indigo-600 hover:text-indigo-900", href: "#", "Edit" }
             }
         }
     }
@@ -161,7 +88,7 @@ mod icons {
     use dioxus::prelude::*;
     use dioxus_html_macro::html;
 
-    pub fn icon_1() -> Element {
+    pub fn icon_users() -> Element {
         html! {
                 <svg
                       class="w-8 h-8 text-white"
@@ -197,7 +124,7 @@ mod icons {
         }
     }
 
-    pub fn icon_2() -> Element {
+    pub fn icon_go() -> Element {
         html! {
             <svg
                   class="w-8 h-8 text-white"
@@ -221,7 +148,7 @@ mod icons {
         }
     }
 
-    pub fn icon_3() -> Element {
+    pub fn icon_products() -> Element {
         html! {
             <svg
                   class="w-8 h-8 text-white"

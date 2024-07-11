@@ -1,6 +1,6 @@
 /*
 * @Date: 2022-10-15 09:52:14
- * @LastEditTime: 2024-07-07 21:21:12
+ * @LastEditTime: 2024-07-09 16:42:32
 * @Description:
 */
 
@@ -26,7 +26,7 @@ pub fn view() -> Element {
             div {
                 class: format!(
                     "transition:opacity 0.25s ease {} z-50 fixed w-full h-full top-0 left-0 flex items-center justify-center",
-                    if open() { "false" } else { "opacity-0 pointer-events-none" },
+                    if open() { "" } else { "opacity-0 pointer-events-none" },
                 ),
                 // overlay
                 div { class: "absolute w-full h-full bg-gray-900 opacity-50 modal-overlay" }
