@@ -16,7 +16,9 @@ pub fn eval_chart1() {
 
     spawn(async move {
         sleep_ms(1000).await;
-        _eval.send((vec![148, 150, 130, 170]).into()).unwrap();
+        if let Err(err) = _eval.send((vec![148, 150, 130, 170]).into()) {
+            tracing::warn!("Sending to JS returns error: {err:?}");
+        }
     });
 }
 
